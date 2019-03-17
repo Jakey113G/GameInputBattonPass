@@ -35,9 +35,9 @@ int main()
 		inputChecker.UpdateInputStates();
 		if (inputChecker.HasInputChanged())
 		{
-			if (windowFinder.GetStoredHandle() == NULL)
+			if (GetHandleInformation(windowFinder.GetStoredHandle(), NULL) == FALSE)
 			{
-				//Try and find a window NOW, if we haven't got one! Critical to have it now!
+				//Try and find a window NOW, as the old one is not valid! Critical to have it now!
 				for (std::string const& windowName : options.m_WindowPriorityList)
 				{
 					if (windowFinder.FindHwnd(windowName.c_str()) != NULL)
@@ -62,6 +62,8 @@ void FocusGameWindow(HWND windowHandle)
 	{
 		std::cout << "++ Changing focus to game window ++" << std::endl;
 		ShowWindow(windowHandle, SW_MAXIMIZED);
+		SetFocus(windowHandle);
+		SendMessage(windowHandle, WM_SETFOCUS, 0, 0);
 		SetForegroundWindow(windowHandle);
 		SetActiveWindow(windowHandle);
 	}
